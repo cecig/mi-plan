@@ -219,6 +219,27 @@
   }
   .note-box span { flex-shrink: 0; }
 
+  /* Weight history */
+  .weight-history { margin-top: 1.5rem; }
+  .wh-row { display: flex; justify-content: space-between; padding: .4rem .5rem; font-size: .8rem; border-bottom: 1px solid #f4f4f5; }
+  .wh-row .wh-week { color: #71717a; }
+  .wh-row .wh-val { font-weight: 600; }
+  .wh-row .wh-diff { font-size: .75rem; }
+  .wh-diff.down { color: #059669; }
+  .wh-diff.up { color: #ef4444; }
+  .wh-diff.same { color: #a1a1aa; }
+
+  /* Meal notes */
+  .meal-notes textarea {
+    width: 100%; padding: .6rem .75rem; border: 1px solid #e5e5e5; border-radius: 8px;
+    font-family: inherit; font-size: .85rem; background: #fafafa; resize: vertical; min-height: 60px;
+  }
+  .meal-notes textarea:focus { outline: none; border-color: #7c3aed; background: #fff; }
+
+  /* Phase active indicator */
+  .phase.phase-active { border-color: #7c3aed; border-width: 2px; }
+  .phase.phase-done { opacity: .5; }
+
   .footer { text-align: center; padding: 2rem; color: #d4d4d8; font-size: .7rem; }
 
   @media (max-width: 600px) {
@@ -244,15 +265,15 @@
   <p class="subtitle">Progresión gradual y sostenible · Inicio 23 Feb 2026</p>
 
   <div class="stats">
-    <div class="stat"><div class="label">Peso actual</div><div class="val">54.8 kg</div><div class="hint">Día 25 del ciclo</div></div>
+    <div class="stat"><div class="label">Peso actual</div><div class="val" id="stat-weight">54.8 kg</div><div class="hint" id="stat-weight-hint">Inicio</div></div>
     <div class="stat"><div class="label">Objetivo intermedio</div><div class="val">52 kg</div><div class="hint">Fase 2 · 3–5 sem</div></div>
     <div class="stat"><div class="label">Objetivo final</div><div class="val">50–51 kg</div><div class="hint">Fase 3 · 4–6 sem</div></div>
-    <div class="stat"><div class="label">Calorías rango</div><div class="val">1450–1550</div><div class="hint">kcal según fase</div></div>
+    <div class="stat"><div class="label">Fase actual</div><div class="val" id="stat-phase">Fase 1</div><div class="hint" id="stat-phase-hint">Estabilización</div></div>
   </div>
 
   <h2>Fases</h2>
 
-  <div class="phase">
+  <div class="phase phase-active" id="phase-1">
     <div class="phase-head"><h3>Fase 1 – Estabilización y Desinflamación</h3><span class="badge badge-1">Semana 1–2</span></div>
     <div class="phase-grid">
       <div class="pg-item"><div class="dt">Objetivo</div><div class="dd">Estabilizar, desinflamar</div></div>
@@ -261,7 +282,7 @@
     </div>
   </div>
 
-  <div class="phase">
+  <div class="phase" id="phase-2">
     <div class="phase-head"><h3>Fase 2 – Consolidar 52 kg</h3><span class="badge badge-2">3–5 semanas</span></div>
     <div class="phase-grid">
       <div class="pg-item"><div class="dt">Calorías</div><div class="dd">1500–1550 kcal</div></div>
@@ -272,7 +293,7 @@
     </div>
   </div>
 
-  <div class="phase">
+  <div class="phase" id="phase-3">
     <div class="phase-head"><h3>Fase 3 – Definición 50–51 kg</h3><span class="badge badge-3">4–6 semanas</span></div>
     <div class="phase-grid">
       <div class="pg-item"><div class="dt">Calorías</div><div class="dd">1450–1500 kcal</div></div>
@@ -282,15 +303,23 @@
       <div class="pg-item"><div class="dt">Alerta</div><div class="dd">Si hambre crónica o ciclo alterado → 1550 kcal</div></div>
     </div>
   </div>
+  <div class="divider"></div>
+  <h2>Historial de Peso</h2>
+  <div class="day-content" id="weight-history-card">
+    <div id="weight-history" class="weight-history">
+      <div style="text-align:center;color:#a1a1aa;font-size:.85rem;padding:1rem;">Completá tu primer check-in para ver el historial</div>
+    </div>
+  </div>
+
 </div>
 </div>
 
 <!-- ==================== THIS WEEK TAB ==================== -->
 <div id="tab-week" class="tab">
 <div class="container">
-  <span class="week-label">Semana 1 · Fase 1 – Estabilización</span>
+  <span class="week-label" id="week-label">Semana 1 · Fase 1 – Estabilización</span>
   <h1>Esta Semana</h1>
-  <p class="subtitle">23 Feb – 1 Mar 2026 · Foco en técnica perfecta, mantener cargas</p>
+  <p class="subtitle" id="week-subtitle">23 Feb – 1 Mar 2026 · Foco en técnica perfecta, mantener cargas</p>
 
   <!-- ===== TRAINING ===== -->
   <h2>Entrenamiento</h2>
@@ -477,6 +506,12 @@
     </div>
   </div>
 
+  <div class="meal-notes" style="margin-top:1rem;">
+    <h3 style="font-size:.85rem;margin-bottom:.5rem;">Notas de comidas esta semana</h3>
+    <textarea id="meal-notes" placeholder="Cambios, ajustes, o notas sobre comidas de esta semana..."></textarea>
+    <button class="save-training-btn" style="margin-top:.5rem;" onclick="saveMealNotes()">Guardar notas</button>
+  </div>
+
   <div class="divider"></div>
 
   <!-- ===== PREVIEW NEXT WEEK ===== -->
@@ -543,6 +578,220 @@
 <div class="footer">Plan Descenso de Peso · 2026</div>
 
 <script>
+/* ===== DATA STORE ===== */
+const STORE_KEY = 'miplan_data';
+const PLAN_START = new Date('2026-02-23');
+
+function getDefaultData() {
+  return {
+    currentWeek: 1,
+    currentPhase: 1,
+    startWeight: 54.8,
+    checkins: {},
+    training: {},
+    mealNotes: {}
+  };
+}
+
+function loadData() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (!raw) return getDefaultData();
+    return Object.assign(getDefaultData(), JSON.parse(raw));
+  } catch(e) { return getDefaultData(); }
+}
+
+function saveData(data) {
+  localStorage.setItem(STORE_KEY, JSON.stringify(data));
+}
+
+/* ===== WEEK CALCULATION ===== */
+function getCurrentWeek() {
+  const now = new Date();
+  const diff = Math.floor((now - PLAN_START) / (7 * 24 * 60 * 60 * 1000));
+  return Math.max(1, diff + 1);
+}
+
+function getWeekDates(weekNum) {
+  const start = new Date(PLAN_START);
+  start.setDate(start.getDate() + (weekNum - 1) * 7);
+  const end = new Date(start);
+  end.setDate(end.getDate() + 6);
+  const fmt = d => d.toLocaleDateString('es-AR', { day: 'numeric', month: 'short' });
+  return { start, end, label: `${fmt(start)} – ${fmt(end)} 2026` };
+}
+
+/* ===== PHASE LOGIC ===== */
+function determinePhase(data) {
+  const week = data.currentWeek;
+  const weights = Object.values(data.checkins).map(c => parseFloat(c.weight)).filter(w => !isNaN(w));
+  const lastWeight = weights.length ? weights[weights.length - 1] : data.startWeight;
+
+  // Phase 3: reached ~52kg or week 8+
+  if (lastWeight <= 52.5 && week >= 5) return 3;
+  // Phase 2: after week 2
+  if (week >= 3) return 2;
+  // Phase 1: weeks 1-2
+  return 1;
+}
+
+const PHASE_INFO = {
+  1: { name: 'Fase 1', hint: 'Estabilización', kcal: '1500–1550', focus: 'Foco en técnica perfecta, mantener cargas' },
+  2: { name: 'Fase 2', hint: 'Consolidar 52 kg', kcal: '1500–1550', focus: 'Progresión leve, +1-2 kg en piernas' },
+  3: { name: 'Fase 3', hint: 'Definición 50–51 kg', kcal: '1450–1500', focus: 'Máx 0.2 kg/semana, 8-10k pasos/día' }
+};
+
+/* ===== UI UPDATES ===== */
+function updateUI(data) {
+  // Current weight
+  const weights = Object.values(data.checkins).map(c => parseFloat(c.weight)).filter(w => !isNaN(w));
+  const currentWeight = weights.length ? weights[weights.length - 1] : data.startWeight;
+  const weightEl = document.getElementById('stat-weight');
+  const weightHintEl = document.getElementById('stat-weight-hint');
+  if (weightEl) weightEl.textContent = currentWeight + ' kg';
+  if (weightHintEl) {
+    const diff = (currentWeight - data.startWeight).toFixed(1);
+    const sign = diff > 0 ? '+' : '';
+    weightHintEl.textContent = weights.length ? `${sign}${diff} kg desde inicio` : 'Inicio';
+  }
+
+  // Phase
+  const phase = determinePhase(data);
+  data.currentPhase = phase;
+  const pi = PHASE_INFO[phase];
+  const phaseEl = document.getElementById('stat-phase');
+  const phaseHintEl = document.getElementById('stat-phase-hint');
+  if (phaseEl) phaseEl.textContent = pi.name;
+  if (phaseHintEl) phaseHintEl.textContent = pi.hint;
+
+  // Phase cards highlight
+  [1, 2, 3].forEach(p => {
+    const card = document.getElementById('phase-' + p);
+    if (!card) return;
+    card.classList.remove('phase-active', 'phase-done');
+    if (p === phase) card.classList.add('phase-active');
+    else if (p < phase) card.classList.add('phase-done');
+  });
+
+  // Week label & subtitle
+  const week = data.currentWeek;
+  const dates = getWeekDates(week);
+  const weekLabel = document.getElementById('week-label');
+  const weekSub = document.getElementById('week-subtitle');
+  if (weekLabel) weekLabel.textContent = `Semana ${week} · ${pi.name} – ${pi.hint}`;
+  if (weekSub) weekSub.textContent = `${dates.label} · ${pi.focus}`;
+
+  // Weight history
+  renderWeightHistory(data);
+
+  // Restore check-in for current week
+  const ci = data.checkins[week];
+  if (ci) {
+    ['weight', 'binge', 'pleasure', 'takeout', 'energy', 'hunger'].forEach(f => {
+      const el = document.getElementById('ci-' + f);
+      if (el && ci[f]) el.value = ci[f];
+    });
+  }
+
+  // Restore meal notes
+  const mealNotesEl = document.getElementById('meal-notes');
+  if (mealNotesEl && data.mealNotes[week]) {
+    mealNotesEl.value = data.mealNotes[week];
+  }
+
+  // Restore training weights
+  restoreTrainingWeights(data, week);
+}
+
+function renderWeightHistory(data) {
+  const container = document.getElementById('weight-history');
+  if (!container) return;
+
+  const entries = Object.entries(data.checkins)
+    .map(([w, c]) => ({ week: parseInt(w), weight: parseFloat(c.weight), date: c.date }))
+    .filter(e => !isNaN(e.weight))
+    .sort((a, b) => a.week - b.week);
+
+  if (entries.length === 0) {
+    container.innerHTML = '<div style="text-align:center;color:#a1a1aa;font-size:.85rem;padding:1rem;">Completá tu primer check-in para ver el historial</div>';
+    return;
+  }
+
+  let html = '';
+  entries.forEach((e, i) => {
+    const prev = i > 0 ? entries[i - 1].weight : data.startWeight;
+    const diff = (e.weight - prev).toFixed(1);
+    const cls = diff < 0 ? 'down' : diff > 0 ? 'up' : 'same';
+    const sign = diff > 0 ? '+' : '';
+    html += `<div class="wh-row"><span class="wh-week">Semana ${e.week}</span><span class="wh-val">${e.weight} kg</span><span class="wh-diff ${cls}">${sign}${diff}</span></div>`;
+  });
+
+  // Total progress
+  const totalDiff = (entries[entries.length - 1].weight - data.startWeight).toFixed(1);
+  const totalCls = totalDiff < 0 ? 'down' : totalDiff > 0 ? 'up' : 'same';
+  const totalSign = totalDiff > 0 ? '+' : '';
+  html += `<div class="wh-row" style="border-top:2px solid #e5e5e5;margin-top:.25rem;padding-top:.5rem;font-weight:600;"><span class="wh-week">Total</span><span class="wh-val">${entries[entries.length - 1].weight} kg</span><span class="wh-diff ${totalCls}">${totalSign}${totalDiff}</span></div>`;
+
+  container.innerHTML = html;
+}
+
+/* ===== TRAINING PERSISTENCE ===== */
+function getTrainingData(dayIdx) {
+  const list = document.getElementById('ex-list-' + dayIdx);
+  if (!list) return [];
+  const rows = list.querySelectorAll('.ex-row');
+  const exercises = [];
+  rows.forEach(row => {
+    const input = row.querySelector('.ex-input');
+    if (input && input.value) {
+      const nameEl = row.querySelector('.ex-name');
+      exercises.push({ name: nameEl ? nameEl.textContent.trim() : '', weight: input.value });
+    }
+  });
+  return exercises;
+}
+
+function restoreTrainingWeights(data, week) {
+  for (let d = 0; d < 4; d++) {
+    const key = week + '_' + d;
+    const saved = data.training[key];
+    if (!saved) continue;
+    const list = document.getElementById('ex-list-' + d);
+    if (!list) continue;
+    saved.forEach(ex => {
+      const rows = list.querySelectorAll('.ex-row');
+      rows.forEach(row => {
+        const nameEl = row.querySelector('.ex-name');
+        const input = row.querySelector('.ex-input');
+        if (nameEl && input && nameEl.textContent.trim().startsWith(ex.name.split(' ')[0])) {
+          if (ex.weight) input.value = ex.weight;
+        }
+      });
+    });
+  }
+}
+
+function saveTrainingDay(dayIdx) {
+  const data = loadData();
+  const week = data.currentWeek;
+  const key = week + '_' + dayIdx;
+  data.training[key] = getTrainingData(dayIdx);
+  saveData(data);
+  showToast(`Día ${dayIdx + 1} guardado`);
+}
+
+/* ===== MEAL NOTES ===== */
+function saveMealNotes() {
+  const data = loadData();
+  const notes = document.getElementById('meal-notes');
+  if (notes) {
+    data.mealNotes[data.currentWeek] = notes.value;
+    saveData(data);
+    showToast('Notas de comidas guardadas');
+  }
+}
+
+/* ===== NAVIGATION ===== */
 function showTab(tab, btn) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -557,6 +806,7 @@ function showDay(idx, el) {
   document.getElementById('day-' + idx).classList.add('active');
 }
 
+/* ===== EXERCISE MANAGEMENT ===== */
 function addExToDay(dayIdx) {
   const nameInput = document.querySelector(`.add-name[data-day="${dayIdx}"]`);
   const weightInput = document.querySelector(`.add-weight[data-day="${dayIdx}"]`);
@@ -591,15 +841,19 @@ function removeEx(btn) {
   }
 }
 
+/* ===== TOAST ===== */
 function showToast(msg) {
   const toast = document.getElementById('toast');
-  toast.textContent = '✓ ' + msg;
+  toast.textContent = '\u2713 ' + msg;
   toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), 2000);
 }
 
+/* ===== CHECK-IN ===== */
 function saveCheckin() {
-  const data = {
+  const data = loadData();
+  const week = data.currentWeek;
+  data.checkins[week] = {
     weight: document.getElementById('ci-weight').value,
     binge: document.getElementById('ci-binge').value,
     pleasure: document.getElementById('ci-pleasure').value,
@@ -608,9 +862,31 @@ function saveCheckin() {
     hunger: document.getElementById('ci-hunger').value,
     date: new Date().toISOString().split('T')[0]
   };
-  console.log('Check-in saved:', JSON.stringify(data));
-  showToast('Check-in semana 1 guardado');
+
+  // Auto-advance phase
+  data.currentPhase = determinePhase(data);
+  saveData(data);
+  updateUI(data);
+  showToast(`Check-in semana ${week} guardado`);
 }
+
+/* ===== INIT ===== */
+document.addEventListener('DOMContentLoaded', function() {
+  const data = loadData();
+  data.currentWeek = getCurrentWeek();
+  saveData(data);
+  updateUI(data);
+
+  // Wire up save training buttons
+  document.querySelectorAll('.save-training-btn').forEach(btn => {
+    const text = btn.textContent;
+    const match = text.match(/(\d)/);
+    if (match) {
+      const dayIdx = parseInt(match[1]) - 1;
+      btn.onclick = function() { saveTrainingDay(dayIdx); };
+    }
+  });
+});
 </script>
 </body>
 </html>
