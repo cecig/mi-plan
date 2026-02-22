@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Mi Plan</title>
+
+<!-- PWA / Home Screen -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Mi Plan">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#ffffff">
+
+<!-- Icons -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%237c3aed'/><text y='.88em' x='50' text-anchor='middle' font-size='65'>🎯</text></svg>">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: #fafafa; color: #1a1a1a; line-height: 1.6; }
+
+  /* Nav */
+  .nav {
+    display: flex; align-items: center; justify-content: center; gap: .5rem;
+    padding: 1rem; background: #fff; border-bottom: 1px solid #e5e5e5;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .nav-btn {
+    padding: .5rem 1.5rem; border: 1px solid #e5e5e5; background: #fff;
+    border-radius: 8px; font-family: inherit; font-size: .85rem; font-weight: 500;
+    color: #71717a; cursor: pointer; transition: all .15s;
+  }
+  .nav-btn:hover { border-color: #d4d4d8; color: #1a1a1a; }
+  .nav-btn.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+
+  .container { max-width: 800px; margin: 0 auto; padding: 2rem 1.5rem; }
+  .tab { display: none; }
+  .tab.active { display: block; }
+
+  h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: .25rem; }
+  h2 { font-size: 1.15rem; font-weight: 600; margin-bottom: .75rem; color: #1a1a1a; }
+  h3 { font-size: .95rem; font-weight: 600; margin-bottom: .5rem; }
+  .subtitle { color: #71717a; font-size: .9rem; margin-bottom: 2rem; }
+
+  /* Stats */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: .75rem; margin-bottom: 2.5rem; }
+  .stat { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 1rem; }
+  .stat .label { font-size: .7rem; color: #a1a1aa; text-transform: uppercase; letter-spacing: .04em; }
+  .stat .val { font-size: 1.5rem; font-weight: 700; margin-top: .15rem; }
+  .stat .hint { font-size: .75rem; color: #a1a1aa; }
+
+  /* Phase cards */
+  .phase { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
+  .phase-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .5rem; margin-bottom: .75rem; }
+  .phase-head h3 { margin: 0; }
+  .badge { font-size: .65rem; padding: .2rem .6rem; border-radius: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: .03em; }
+  .badge-1 { background: #f3f0ff; color: #7c3aed; }
+  .badge-2 { background: #eff6ff; color: #2563eb; }
+  .badge-3 { background: #ecfdf5; color: #059669; }
+  .phase-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: .5rem; }
+  .pg-item { background: #fafafa; border-radius: 8px; padding: .6rem .75rem; }
+  .pg-item .dt { font-size: .65rem; color: #a1a1aa; text-transform: uppercase; letter-spacing: .03em; }
+  .pg-item .dd { font-size: .85rem; font-weight: 500; margin-top: .1rem; }
+
+  .divider { height: 1px; background: #e5e5e5; margin: 2rem 0; }
+
+  /* Week label */
+  .week-label {
+    display: inline-block; font-size: .7rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: .05em; color: #7c3aed; background: #f3f0ff; padding: .2rem .6rem;
+    border-radius: 6px; margin-bottom: .75rem;
+  }
+
+  /* Training day tabs */
+  .day-tabs { display: flex; gap: .35rem; margin-bottom: 1rem; }
+  .day-tab {
+    flex: 1; background: #fff; border: 1px solid #e5e5e5; border-radius: 10px;
+    padding: .65rem .5rem; text-align: center; cursor: pointer; transition: all .15s;
+  }
+  .day-tab:hover { border-color: #d4d4d8; }
+  .day-tab.active { border-color: #7c3aed; background: #f9f5ff; }
+  .day-tab .icon { font-size: 1.2rem; margin-bottom: .1rem; }
+  .day-tab .dnum { font-size: .55rem; color: #a1a1aa; text-transform: uppercase; letter-spacing: .03em; }
+  .day-tab .dname { font-size: .75rem; font-weight: 600; }
+
+  /* Day content panels */
+  .day-panel { display: none; }
+  .day-panel.active { display: block; }
+
+  .day-content {
+    background: #fff; border: 1px solid #e5e5e5; border-radius: 12px;
+    padding: 1.25rem; margin-bottom: 1rem;
+  }
+  .day-content-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: .75rem;
+  }
+  .day-content-header h3 { margin: 0; font-size: .9rem; }
+  .day-focus { font-size: .8rem; color: #71717a; margin-bottom: 1rem; }
+
+  /* Exercise rows */
+  .ex-row {
+    display: flex; align-items: center; gap: .5rem;
+    padding: .6rem .5rem; border-bottom: 1px solid #f4f4f5;
+  }
+  .ex-row:last-child { border-bottom: none; }
+  .ex-name { flex: 1; font-size: .85rem; font-weight: 500; }
+  .ex-target { font-size: .8rem; color: #a1a1aa; width: 60px; text-align: center; }
+  .ex-input {
+    width: 65px; padding: .3rem .4rem; border: 1px solid #e5e5e5; border-radius: 6px;
+    font-family: inherit; font-size: .85rem; text-align: center; background: #fafafa;
+  }
+  .ex-input:focus { outline: none; border-color: #7c3aed; background: #fff; }
+  .ex-delete {
+    width: 28px; height: 28px; border: none; background: none; color: #d4d4d8;
+    cursor: pointer; font-size: 1rem; border-radius: 6px; transition: all .15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ex-delete:hover { background: #fef2f2; color: #ef4444; }
+
+  .ex-header {
+    display: flex; gap: .5rem; padding: .4rem .5rem .4rem .5rem;
+    border-bottom: 1px solid #e5e5e5; margin-bottom: .25rem;
+  }
+  .ex-header span {
+    font-size: .6rem; text-transform: uppercase; letter-spacing: .04em;
+    color: #a1a1aa; font-weight: 600;
+  }
+  .ex-header .h-name { flex: 1; }
+  .ex-header .h-target { width: 60px; text-align: center; }
+  .ex-header .h-real { width: 65px; text-align: center; }
+  .ex-header .h-del { width: 28px; }
+
+  .empty-day {
+    text-align: center; padding: 2rem 1rem; color: #a1a1aa; font-size: .85rem;
+  }
+
+  /* Add exercise inline */
+  .add-ex-row {
+    display: flex; gap: .4rem; padding: .75rem .5rem 0; align-items: center;
+    border-top: 1px solid #f4f4f5; margin-top: .25rem;
+  }
+  .add-ex-row input[type="text"] {
+    flex: 1; padding: .4rem .55rem; border: 1px solid #e5e5e5; border-radius: 6px;
+    font-family: inherit; font-size: .85rem; min-width: 0;
+  }
+  .add-ex-row input[type="number"] {
+    width: 65px; padding: .4rem .4rem; border: 1px solid #e5e5e5; border-radius: 6px;
+    font-family: inherit; font-size: .85rem; text-align: center;
+  }
+  .add-ex-row input:focus { outline: none; border-color: #7c3aed; }
+  .add-ex-btn {
+    padding: .4rem .75rem; background: #1a1a1a; color: #fff; border: none;
+    border-radius: 6px; font-family: inherit; font-size: .8rem; font-weight: 500;
+    cursor: pointer; white-space: nowrap;
+  }
+  .add-ex-btn:hover { background: #333; }
+
+  /* Save training button */
+  .save-training-btn {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .5rem 1.25rem; background: #7c3aed; color: #fff; border: none;
+    border-radius: 8px; font-family: inherit; font-size: .85rem; font-weight: 500;
+    cursor: pointer; transition: background .15s; margin-top: .5rem;
+  }
+  .save-training-btn:hover { background: #6d28d9; }
+
+  /* Meal cards */
+  .meals { display: flex; flex-direction: column; gap: .75rem; margin-bottom: 2rem; }
+  .meal-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 1rem 1.25rem; }
+  .meal-card h4 { font-size: .8rem; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: #71717a; margin-bottom: .6rem; }
+  .opt { background: #fafafa; border-radius: 8px; padding: .5rem .75rem; margin-bottom: .4rem; font-size: .85rem; color: #3f3f46; }
+  .opt:last-child { margin-bottom: 0; }
+  .opt-label { font-size: .6rem; font-weight: 700; color: #7c3aed; text-transform: uppercase; letter-spacing: .04em; margin-bottom: .1rem; margin-top: .35rem; }
+  .opt-label:first-child { margin-top: 0; }
+
+  /* Preview card */
+  .preview-card { background: #fff; border: 1px dashed #d4d4d8; border-radius: 12px; padding: 1.25rem; }
+  .preview-label { font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #a1a1aa; margin-bottom: .75rem; }
+  .preview-card h3 { color: #71717a; font-weight: 500; }
+  .preview-item { font-size: .85rem; color: #71717a; padding: .3rem 0; }
+  .preview-highlight { display: inline-block; background: #f3f0ff; color: #7c3aed; font-size: .8rem; font-weight: 500; padding: .15rem .5rem; border-radius: 6px; margin-top: .25rem; }
+
+  /* Tracker / Check-in */
+  .tracker { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 1.25rem; }
+  .tracker h3 { margin-bottom: 1rem; }
+  .tracker-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: .75rem; }
+  .tracker-item { display: flex; flex-direction: column; gap: .25rem; }
+  .tracker-item label { font-size: .75rem; font-weight: 500; color: #71717a; }
+  .tracker-item input {
+    padding: .5rem .65rem; border: 1px solid #e5e5e5; border-radius: 8px;
+    font-family: inherit; font-size: .9rem; background: #fafafa; width: 100%;
+  }
+  .tracker-item input:focus { outline: none; border-color: #7c3aed; background: #fff; }
+
+  .save-checkin-btn {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .6rem 1.5rem; background: #1a1a1a; color: #fff; border: none;
+    border-radius: 8px; font-family: inherit; font-size: .9rem; font-weight: 500;
+    cursor: pointer; transition: all .15s; margin-top: 1.25rem;
+  }
+  .save-checkin-btn:hover { background: #333; }
+
+  /* Saved toast */
+  .toast {
+    position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px);
+    background: #1a1a1a; color: #fff; padding: .65rem 1.5rem; border-radius: 10px;
+    font-size: .85rem; font-weight: 500; opacity: 0; transition: all .3s ease;
+    z-index: 200; pointer-events: none;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  /* Note box */
+  .note-box {
+    background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px;
+    padding: 1rem; font-size: .85rem; color: #92400e; margin-top: 1.5rem;
+    display: flex; gap: .5rem;
+  }
+  .note-box span { flex-shrink: 0; }
+
+  .footer { text-align: center; padding: 2rem; color: #d4d4d8; font-size: .7rem; }
+
+  @media (max-width: 600px) {
+    .container { padding: 1.5rem 1rem; }
+    .day-tabs { flex-wrap: wrap; }
+    .day-tab { min-width: calc(50% - .35rem); }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .ex-row { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="showTab('plan', this)">Plan General</button>
+  <button class="nav-btn" onclick="showTab('week', this)">Esta Semana</button>
+</nav>
+
+<!-- ==================== PLAN TAB ==================== -->
+<div id="tab-plan" class="tab active">
+<div class="container">
+  <h1>Plan Descenso de Peso</h1>
+  <p class="subtitle">Progresión gradual y sostenible · Inicio 23 Feb 2026</p>
+
+  <div class="stats">
+    <div class="stat"><div class="label">Peso actual</div><div class="val">54.8 kg</div><div class="hint">Día 25 del ciclo</div></div>
+    <div class="stat"><div class="label">Objetivo intermedio</div><div class="val">52 kg</div><div class="hint">Fase 2 · 3–5 sem</div></div>
+    <div class="stat"><div class="label">Objetivo final</div><div class="val">50–51 kg</div><div class="hint">Fase 3 · 4–6 sem</div></div>
+    <div class="stat"><div class="label">Calorías rango</div><div class="val">1450–1550</div><div class="hint">kcal según fase</div></div>
+  </div>
+
+  <h2>Fases</h2>
+
+  <div class="phase">
+    <div class="phase-head"><h3>Fase 1 – Estabilización y Desinflamación</h3><span class="badge badge-1">Semana 1–2</span></div>
+    <div class="phase-grid">
+      <div class="pg-item"><div class="dt">Objetivo</div><div class="dd">Estabilizar, desinflamar</div></div>
+      <div class="pg-item"><div class="dt">Entrenamiento</div><div class="dd">4 sesiones · técnica perfecta</div></div>
+      <div class="pg-item"><div class="dt">Cargas</div><div class="dd">Mantener pesos actuales</div></div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-head"><h3>Fase 2 – Consolidar 52 kg</h3><span class="badge badge-2">3–5 semanas</span></div>
+    <div class="phase-grid">
+      <div class="pg-item"><div class="dt">Calorías</div><div class="dd">1500–1550 kcal</div></div>
+      <div class="pg-item"><div class="dt">Entrenamiento</div><div class="dd">4 sesiones · progresión leve</div></div>
+      <div class="pg-item"><div class="dt">Descenso esperado</div><div class="dd">0.2–0.4 kg/semana</div></div>
+      <div class="pg-item"><div class="dt">Check-in</div><div class="dd">Semanal: peso, cintura, descontrol</div></div>
+      <div class="pg-item"><div class="dt">Si estancamiento 2 sem</div><div class="dd">−100 kcal o +pasos</div></div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-head"><h3>Fase 3 – Definición 50–51 kg</h3><span class="badge badge-3">4–6 semanas</span></div>
+    <div class="phase-grid">
+      <div class="pg-item"><div class="dt">Calorías</div><div class="dd">1450–1500 kcal</div></div>
+      <div class="pg-item"><div class="dt">Entrenamiento</div><div class="dd">4 sesiones + 8–10k pasos/día</div></div>
+      <div class="pg-item"><div class="dt">Descenso esperado</div><div class="dd">Máx 0.2 kg/semana</div></div>
+      <div class="pg-item"><div class="dt">Check-in</div><div class="dd">Quincenal: energía, hambre, ciclo</div></div>
+      <div class="pg-item"><div class="dt">Alerta</div><div class="dd">Si hambre crónica o ciclo alterado → 1550 kcal</div></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ==================== THIS WEEK TAB ==================== -->
+<div id="tab-week" class="tab">
+<div class="container">
+  <span class="week-label">Semana 1 · Fase 1 – Estabilización</span>
+  <h1>Esta Semana</h1>
+  <p class="subtitle">23 Feb – 1 Mar 2026 · Foco en técnica perfecta, mantener cargas</p>
+
+  <!-- ===== TRAINING ===== -->
+  <h2>Entrenamiento</h2>
+  <p style="font-size:.8rem;color:#a1a1aa;margin-bottom:1rem;">~60 min · Incluir 5–10 min de core · Última serie con 1–2 reps en reserva</p>
+
+  <div class="day-tabs">
+    <div class="day-tab active" onclick="showDay(0, this)">
+      <div class="icon">💪</div><div class="dnum">Día 1</div><div class="dname">Full Body</div>
+    </div>
+    <div class="day-tab" onclick="showDay(1, this)">
+      <div class="icon">🦵</div><div class="dnum">Día 2</div><div class="dname">Piernas</div>
+    </div>
+    <div class="day-tab" onclick="showDay(2, this)">
+      <div class="icon">🤸</div><div class="dnum">Día 3</div><div class="dname">Tren Superior</div>
+    </div>
+    <div class="day-tab" onclick="showDay(3, this)">
+      <div class="icon">🧘</div><div class="dnum">Día 4</div><div class="dname">Calistenia</div>
+    </div>
+  </div>
+
+  <!-- Day panels -->
+  <div id="day-0" class="day-panel active">
+    <div class="day-content">
+      <div class="day-content-header"><h3>Día 1 – Full Body</h3></div>
+      <div class="day-focus">Mantener pesos actuales · Técnica perfecta</div>
+      <div class="ex-header">
+        <span class="h-name">Ejercicio</span>
+        <span class="h-target">Objetivo</span>
+        <span class="h-real">Real (kg)</span>
+        <span class="h-del"></span>
+      </div>
+      <div id="ex-list-0" class="ex-list">
+        <div class="empty-day">Enviar ejercicios para completar este día</div>
+      </div>
+      <div class="add-ex-row">
+        <input type="text" placeholder="Agregar ejercicio..." class="add-name" data-day="0">
+        <input type="number" step="0.5" placeholder="kg" class="add-weight" data-day="0">
+        <button class="add-ex-btn" onclick="addExToDay(0)">+</button>
+      </div>
+    </div>
+    <button class="save-training-btn" onclick="showToast('Día 1 guardado')">Guardar día 1</button>
+  </div>
+
+  <div id="day-1" class="day-panel">
+    <div class="day-content">
+      <div class="day-content-header"><h3>Día 2 – Piernas y Glúteos</h3></div>
+      <div class="day-focus">Mantener pesos actuales · Técnica perfecta</div>
+      <div class="ex-header">
+        <span class="h-name">Ejercicio</span>
+        <span class="h-target">Objetivo</span>
+        <span class="h-real">Real (kg)</span>
+        <span class="h-del"></span>
+      </div>
+      <div id="ex-list-1" class="ex-list">
+        <div class="empty-day">Enviar ejercicios para completar este día</div>
+      </div>
+      <div class="add-ex-row">
+        <input type="text" placeholder="Agregar ejercicio..." class="add-name" data-day="1">
+        <input type="number" step="0.5" placeholder="kg" class="add-weight" data-day="1">
+        <button class="add-ex-btn" onclick="addExToDay(1)">+</button>
+      </div>
+    </div>
+    <button class="save-training-btn" onclick="showToast('Día 2 guardado')">Guardar día 2</button>
+  </div>
+
+  <div id="day-2" class="day-panel">
+    <div class="day-content">
+      <div class="day-content-header"><h3>Día 3 – Tren Superior</h3></div>
+      <div class="day-focus">Mantener pesos actuales · Técnica perfecta</div>
+      <div class="ex-header">
+        <span class="h-name">Ejercicio</span>
+        <span class="h-target">Objetivo</span>
+        <span class="h-real">Real (kg)</span>
+        <span class="h-del"></span>
+      </div>
+      <div id="ex-list-2" class="ex-list">
+        <div class="empty-day">Enviar ejercicios para completar este día</div>
+      </div>
+      <div class="add-ex-row">
+        <input type="text" placeholder="Agregar ejercicio..." class="add-name" data-day="2">
+        <input type="number" step="0.5" placeholder="kg" class="add-weight" data-day="2">
+        <button class="add-ex-btn" onclick="addExToDay(2)">+</button>
+      </div>
+    </div>
+    <button class="save-training-btn" onclick="showToast('Día 3 guardado')">Guardar día 3</button>
+  </div>
+
+  <div id="day-3" class="day-panel">
+    <div class="day-content">
+      <div class="day-content-header"><h3>Día 4 – Calistenia</h3></div>
+      <div class="day-focus">Mantener pesos actuales · Técnica perfecta</div>
+      <div class="ex-header">
+        <span class="h-name">Ejercicio</span>
+        <span class="h-target">Objetivo</span>
+        <span class="h-real">Real (kg)</span>
+        <span class="h-del"></span>
+      </div>
+      <div id="ex-list-3" class="ex-list">
+        <div class="empty-day">Enviar ejercicios para completar este día</div>
+      </div>
+      <div class="add-ex-row">
+        <input type="text" placeholder="Agregar ejercicio..." class="add-name" data-day="3">
+        <input type="number" step="0.5" placeholder="kg" class="add-weight" data-day="3">
+        <button class="add-ex-btn" onclick="addExToDay(3)">+</button>
+      </div>
+    </div>
+    <button class="save-training-btn" onclick="showToast('Día 4 guardado')">Guardar día 4</button>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ===== MEALS ===== -->
+  <h2>Comidas – Semana 1</h2>
+  <div class="meals">
+    <div class="meal-card">
+      <h4>Desayuno</h4>
+      <div class="opt-label">Opción A</div>
+      <div class="opt">Yogur griego 190g · Avena 30g · ½ banana · 3 mitades nuez</div>
+      <div class="opt-label">Opción B</div>
+      <div class="opt">2 huevos · 1 feta muzzarella · 2 galletas arroz · Verdura o fruta chica</div>
+    </div>
+    <div class="meal-card">
+      <h4>Almuerzo (rotar)</h4>
+      <div class="opt-label">A · Bowl pollo</div>
+      <div class="opt">150g pollo · 80g arroz integral · Ensalada · 1 cda hummus</div>
+      <div class="opt-label">B · Bowl atún</div>
+      <div class="opt">1 lata atún · 80g arroz integral · 40g choclo · Ensalada · 1 feta muzzarella</div>
+      <div class="opt-label">C · Wrap atún</div>
+      <div class="opt">1 tortilla · 1 lata atún · 1 feta muzzarella · Lechuga + zanahoria · 1 cda Casancrem</div>
+      <div class="opt-label">D · Suprema crocante</div>
+      <div class="opt">130g suprema · Ensalada grande · 1 cda Casancrem o hummus</div>
+    </div>
+    <div class="meal-card">
+      <h4>Merienda</h4>
+      <div class="opt">Yogur griego 170g · Banana entera · Chocolate 15g · Café con 200ml leche</div>
+    </div>
+    <div class="meal-card">
+      <h4>Cena (rotar)</h4>
+      <div class="opt-label">A</div>
+      <div class="opt">Omelette 2 huevos + jamón · Ensalada · 1 cda hummus</div>
+      <div class="opt-label">B</div>
+      <div class="opt">Wrap tortilla + atún o pollo + Casancrem</div>
+      <div class="opt-label">C</div>
+      <div class="opt">Suprema crocante + ensalada</div>
+      <div class="opt-label">D</div>
+      <div class="opt">Wrap de atún con queso + ensalada</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ===== PREVIEW NEXT WEEK ===== -->
+  <div class="preview-card">
+    <div class="preview-label">Preview · Semana 2</div>
+    <h3>Entrenamiento</h3>
+    <div class="preview-item">Goblet Squat → <strong style="color:#1a1a1a;">14 kg</strong></div>
+    <div class="preview-item">Sumo Squat → <strong style="color:#1a1a1a;">16 kg</strong></div>
+    <div class="preview-item">Bulgarian Split Squat → <strong style="color:#1a1a1a;">10 kg</strong></div>
+    <div class="preview-item">Single Leg RDL → <strong style="color:#1a1a1a;">10 kg/lado</strong></div>
+    <div class="preview-item">Lateral Raises → <strong style="color:#1a1a1a;">5 kg</strong> (si técnica sólida)</div>
+    <div class="preview-item">Tricep Extension → <strong style="color:#1a1a1a;">+2 kg</strong> (si controlado)</div>
+    <span class="preview-highlight">+1–2 kg en piernas</span>
+    <div style="margin-top:1rem;"></div>
+    <h3>Comidas</h3>
+    <div class="preview-item">Misma estructura Semana 1 · 1500–1550 kcal</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ===== WEEKLY CHECK-IN (at bottom) ===== -->
+  <h2>Check-in Semanal</h2>
+  <div class="tracker">
+    <div class="tracker-grid">
+      <div class="tracker-item">
+        <label>Peso lunes por la mañana (kg)</label>
+        <input type="number" id="ci-weight" step="0.1" placeholder="54.8">
+      </div>
+      <div class="tracker-item">
+        <label>Episodios de descontrol alimentario</label>
+        <input type="number" id="ci-binge" min="0" placeholder="0">
+      </div>
+      <div class="tracker-item">
+        <label>Momentos de pleasure food</label>
+        <input type="number" id="ci-pleasure" min="0" placeholder="0">
+      </div>
+      <div class="tracker-item">
+        <label>Comidas afuera / delivery</label>
+        <input type="number" id="ci-takeout" min="0" placeholder="0">
+      </div>
+      <div class="tracker-item">
+        <label>Nivel de energía (1–10)</label>
+        <input type="number" id="ci-energy" min="1" max="10" placeholder="7">
+      </div>
+      <div class="tracker-item">
+        <label>Nivel de hambre (1–10)</label>
+        <input type="number" id="ci-hunger" min="1" max="10" placeholder="5">
+      </div>
+    </div>
+    <button class="save-checkin-btn" onclick="saveCheckin()">Guardar check-in</button>
+  </div>
+
+  <div class="note-box">
+    <span>⚡</span>
+    <div><strong>Regla clave:</strong> Si energía baja por déficit, mantener carga y mejorar control. No forzar aumento si compromete técnica.</div>
+  </div>
+
+</div>
+</div>
+
+<!-- Toast notification -->
+<div id="toast" class="toast"></div>
+
+<div class="footer">Plan Descenso de Peso · 2026</div>
+
+<script>
+function showTab(tab, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  btn.classList.add('active');
+}
+
+function showDay(idx, el) {
+  document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.day-panel').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('day-' + idx).classList.add('active');
+}
+
+function addExToDay(dayIdx) {
+  const nameInput = document.querySelector(`.add-name[data-day="${dayIdx}"]`);
+  const weightInput = document.querySelector(`.add-weight[data-day="${dayIdx}"]`);
+  const name = nameInput.value.trim();
+  const weight = weightInput.value;
+  if (!name) return;
+
+  const list = document.getElementById('ex-list-' + dayIdx);
+  const empty = list.querySelector('.empty-day');
+  if (empty) empty.remove();
+
+  const row = document.createElement('div');
+  row.className = 'ex-row';
+  row.innerHTML = `
+    <div class="ex-name">${name}</div>
+    <div class="ex-target">${weight || '–'}</div>
+    <input type="number" step="0.5" class="ex-input" placeholder="${weight || ''}">
+    <button class="ex-delete" onclick="removeEx(this)" title="Eliminar">×</button>
+  `;
+  list.appendChild(row);
+  nameInput.value = '';
+  weightInput.value = '';
+  nameInput.focus();
+}
+
+function removeEx(btn) {
+  const row = btn.closest('.ex-row');
+  const list = row.parentElement;
+  row.remove();
+  if (list.children.length === 0) {
+    list.innerHTML = '<div class="empty-day">Sin ejercicios · Agregá uno abajo</div>';
+  }
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = '✓ ' + msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
+function saveCheckin() {
+  const data = {
+    weight: document.getElementById('ci-weight').value,
+    binge: document.getElementById('ci-binge').value,
+    pleasure: document.getElementById('ci-pleasure').value,
+    takeout: document.getElementById('ci-takeout').value,
+    energy: document.getElementById('ci-energy').value,
+    hunger: document.getElementById('ci-hunger').value,
+    date: new Date().toISOString().split('T')[0]
+  };
+  console.log('Check-in saved:', JSON.stringify(data));
+  showToast('Check-in semana 1 guardado');
+}
+</script>
+</body>
+</html>
